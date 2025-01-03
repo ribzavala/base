@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<XMLVAR version="V9.30126      2/12/2021">
+ <PROG name="*SYSTEM*">
+  <ARRAY name = "$IA_CHKCMB[1]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">129</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">129</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[2]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">130</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">130</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[3]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">131</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">131</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[4]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">132</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">132</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[5]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">133</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">133</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[6]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">134</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">134</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[7]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">135</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">135</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[8]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">136</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">136</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[9]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">137</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">137</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[10]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">138</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">138</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[11]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">2</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">144</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">139</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[12]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">2</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">2</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">145</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">140</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[13]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">2</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">3</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">146</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">141</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[14]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">2</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">4</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">147</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">142</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[15]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">2</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">5</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">148</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">143</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[16]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">5</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">1</FIELD>
+    <FIELD name="$DEC_DO_IDX" prot ="RW">144</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[17]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">5</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">2</FIELD>
+    <FIELD name="$DEC_DO_IDX" prot ="RW">145</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[18]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">5</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">3</FIELD>
+    <FIELD name="$DEC_DO_IDX" prot ="RW">146</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[19]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">5</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">4</FIELD>
+    <FIELD name="$DEC_DO_IDX" prot ="RW">147</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IA_CHKCMB[20]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">5</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">5</FIELD>
+    <FIELD name="$DEC_DO_IDX" prot ="RW">148</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[1]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">129</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">129</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[2]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">130</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">130</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[3]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">131</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">131</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[4]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">132</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">132</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[5]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">133</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">133</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[6]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">134</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">134</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[7]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">135</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">135</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[8]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">136</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">136</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[9]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">137</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">137</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[10]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">138</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">138</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[11]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">2</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">1</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">144</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">139</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[12]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">2</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">2</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">145</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">140</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[13]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">2</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">3</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">146</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">141</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[14]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">2</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">4</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">147</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">142</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[15]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">2</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">5</FIELD>
+    <FIELD name="$DIS_DI_IDX" prot ="RW">148</FIELD>
+    <FIELD name="$STP_DO_IDX" prot ="RW">143</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[16]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">5</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">1</FIELD>
+    <FIELD name="$DEC_DO_IDX" prot ="RW">144</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[17]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">5</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">2</FIELD>
+    <FIELD name="$DEC_DO_IDX" prot ="RW">145</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[18]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">5</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">3</FIELD>
+    <FIELD name="$DEC_DO_IDX" prot ="RW">146</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[19]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">5</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">4</FIELD>
+    <FIELD name="$DEC_DO_IDX" prot ="RW">147</FIELD>
+  </ARRAY>
+  <ARRAY name = "$IB_CHKCMB[20]">
+    <FIELD name="$ENBL" prot ="RW">FALSE</FIELD>
+    <FIELD name="$R_CNTLR" prot ="RW">********</FIELD>
+    <FIELD name="$R_TYPE" prot ="RW">5</FIELD>
+    <FIELD name="$R_INDEX" prot ="RW">5</FIELD>
+    <FIELD name="$DEC_DO_IDX" prot ="RW">148</FIELD>
+  </ARRAY>
+ </PROG>
+</XMLVAR>
