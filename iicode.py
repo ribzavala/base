@@ -237,15 +237,16 @@ def generate_iic_chk_xml(df):
     # Define the variable name and XML header/footer
     var_name = "$IA_CHKCMB"
     XML_HEADER = '''<!-- <Rivian code gen 1.0" /> -->
-<?xml version="1.0" encoding="iso-8859-1"?>
-<XMLVAR version="V9.30126 2/12/2021">
- <PROG name="*SYSTEM*">
-  <VAR name="{var_name}">'''
+    <?xml version="1.0" encoding="iso-8859-1"?>
+    <XMLVAR version="V9.30126 2/12/2021">
+      <PROG name="*SYSTEM*">
+        <VAR name="{var_name}">'''
+    
     XML_FOOTER = '''
-  </VAR>
- </PROG>
-</XMLVAR>
-'''
+        </VAR>
+      </PROG>
+    </XMLVAR>
+    '''
 
     # Start building the XML content
     xml_content = XML_HEADER.format(var_name=var_name)
@@ -256,9 +257,9 @@ def generate_iic_chk_xml(df):
         member_name = row['RobotName']
 
         xml_content += f"""
-    <ARRAY name = "{var_name}[{member_id}]">
-      <FIELD name="$R_CNTLR" prot ="RW">{member_name}</FIELD>
-    </ARRAY>"""
+        <ARRAY name = "{var_name}[{member_id}]">
+        <FIELD name="$R_CNTLR" prot ="RW">{member_name}</FIELD>
+        </ARRAY>"""
 
     # Add the footer to the XML content
     xml_content += XML_FOOTER
