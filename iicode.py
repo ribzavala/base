@@ -8,12 +8,14 @@ import os
 
 import os
 
+import os
+
 def cloned_files(folder):
     """
-    Copies images from a specified directory to the 'images' folder in the root directory.
+    Copies files (images and .json) from a specified directory to the 'images' folder in the root directory.
 
     Parameters:
-    folder (str): Path to the directory containing the images.
+    folder (str): Path to the directory containing the files.
 
     Returns:
     None
@@ -28,23 +30,23 @@ def cloned_files(folder):
         print(f"The specified folder '{folder}' does not exist.")
         return
 
-    # List all valid image files in the source folder
-    image_files = [f for f in os.listdir(folder) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif'))]
+    # List all valid files in the source folder (images and .json)
+    valid_files = [f for f in os.listdir(folder) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif', '.json'))]
 
-    if not image_files:
-        print(f"No images found in the specified folder '{folder}'.")
+    if not valid_files:
+        print(f"No valid files found in the specified folder '{folder}'.")
         return
 
-    # Copy images to the 'images' folder
-    for img in image_files:
-        src_path = os.path.join(folder, img)
-        dest_path = os.path.join(images_folder, img)
+    # Copy files to the 'images' folder
+    for file in valid_files:
+        src_path = os.path.join(folder, file)
+        dest_path = os.path.join(images_folder, file)
         with open(src_path, 'rb') as src_file:
             with open(dest_path, 'wb') as dest_file:
                 dest_file.write(src_file.read())
 
-    # Print a summary instead of displaying images
-    print(f"Copied {len(image_files)} images to the '{images_folder}' folder.")
+    # Print a summary
+    print(f"Copied {len(valid_files)} files to the '{images_folder}' folder.")
 
 def upload_images():
     """
