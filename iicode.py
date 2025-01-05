@@ -4,9 +4,13 @@ from IPython.display import Image, display
 import pandas as pd
 import json
 
+import os
+
+import os
+
 def cloned_files(folder):
     """
-    Lists and displays images from a specified directory.
+    Copies images from a specified directory to the 'images' folder in the root directory.
 
     Parameters:
     folder (str): Path to the directory containing the images.
@@ -14,23 +18,33 @@ def cloned_files(folder):
     Returns:
     None
     """
-    # Check if the folder exists
+    images_folder = 'images'  # Define 'images' folder in root
+
+    # Ensure the 'images' folder exists
+    os.makedirs(images_folder, exist_ok=True)
+
+    # Check if the source folder exists
     if not os.path.exists(folder):
         print(f"The specified folder '{folder}' does not exist.")
         return
-    
-    # List all valid image files in the directory
-    image_files = [f for f in os.listdir(folder) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif'))]
-    
-    if not image_files:
-        print("No images found in the specified directory.")
-        return
-    
-    for img in image_files:
-        img_path = os.path.join(folder, img)
-        print(f"Displaying: {img}")
-        display(Image(filename=img_path))
 
+    # List all valid image files in the source folder
+    image_files = [f for f in os.listdir(folder) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif'))]
+
+    if not image_files:
+        print(f"No images found in the specified folder '{folder}'.")
+        return
+
+    # Copy images to the 'images' folder
+    for img in image_files:
+        src_path = os.path.join(folder, img)
+        dest_path = os.path.join(images_folder, img)
+        with open(src_path, 'rb') as src_file:
+            with open(dest_path, 'wb') as dest_file:
+                dest_file.write(src_file.read())
+
+    # Print a summary instead of displaying images
+    print(f"Copied {len(image_files)} images to the '{images_folder}' folder.")
 
 def upload_images():
     """
