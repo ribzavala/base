@@ -4,6 +4,34 @@ from IPython.display import Image, display
 import pandas as pd
 import json
 
+def cloned_files(folder):
+    """
+    Lists and displays images from a specified directory.
+
+    Parameters:
+    folder (str): Path to the directory containing the images.
+
+    Returns:
+    None
+    """
+    # Check if the folder exists
+    if not os.path.exists(folder):
+        print(f"The specified folder '{folder}' does not exist.")
+        return
+    
+    # List all valid image files in the directory
+    image_files = [f for f in os.listdir(folder) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif'))]
+    
+    if not image_files:
+        print("No images found in the specified directory.")
+        return
+    
+    for img in image_files:
+        img_path = os.path.join(folder, img)
+        print(f"Displaying: {img}")
+        display(Image(filename=img_path))
+
+
 def upload_images():
     """
     Uploads and saves images into a specified folder.
