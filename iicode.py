@@ -164,15 +164,11 @@ def generate_rosipcfg_xml(df, output_file='ROSIPCFG.xml'):
     os.makedirs(folder_path, exist_ok=True)
 
     # Separate the DataFrame into Master and Slaves to enforce order.
-    master_df = df[df['Role'] == 'Master']
-    slaves_df = df[df['Role'] == 'Slave']
-
-    # Concatenate the DataFrames, putting the Master first.
+    master_df = df_updated[df_updated['Role'] == 'Master']
+    slaves_df = df_updated[df_updated['Role'] == 'Slave']
     sorted_df = pd.concat([master_df, slaves_df], ignore_index=True)
-
-    # Extract RobotName and IP from the now-sorted DataFrame.
     robot_data = sorted_df[['RobotName', 'IP']].to_dict('records')
-
+    
     # Build the XML structure as a string.
     xml_content = f"""<ROSIPCFG>
 <ROBOTRING count="{len(robot_data)}" timeslot="400">\n"""
