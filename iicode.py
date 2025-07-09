@@ -157,30 +157,38 @@ def generate_rosipcfg_xml(df, output_file='ROSIPCFG.xml'):
     folder_path = 'OLP_NET1'
     os.makedirs(folder_path, exist_ok=True)
 
-    # Extract RobotName and IP from the DataFrame
-    robot_data = df[['RobotName', 'IP']].to_dict('records')
+    # --- CAMBIO AQUÍ ---
+    # Separa el DataFrame en Master y Slaves para forzar el orden
+    master_df = df[df['Role'] == 'Master']
+    slaves_df = df[df['Role'] == 'Slave']
 
-    # Start building the XML structure as a string
-    xml_content = """<ROSIPCFG>
-<ROBOTRING count="{count}" timeslot="400">\n""".format(count=len(robot_data))
+    # Concatena los DataFrames, poniendo al Master primero
+    sorted_df = pd.concat([master_df, slaves_df], ignore_index=True)
+    # --- FIN DEL CAMBIO ---
 
-    # Add each MEMBER entry
+    # Extrae RobotName e IP del DataFrame ya ordenado
+    robot_data = sorted_df[['RobotName', 'IP']].to_dict('records')
+
+    # Construye la estructura XML como un string
+    xml_content = f"""<ROSIPCFG>
+<ROBOTRING count="{len(robot_data)}" timeslot="400">\n"""
+
+    # Agrega cada miembro
     for robot in robot_data:
-        xml_content += '    <MEMBER name="{name}" ipadd="{ipadd}"/>\n'.format(
-            name=robot["RobotName"], ipadd=robot["IP"]
-        )
+        # Reemplaza los valores nulos (NaN) por 'NA' para un XML más limpio
+        ip_address = robot["IP"] if pd.notna(robot["IP"]) else 'NA'
+        xml_content += f'    <MEMBER name="{robot["RobotName"]}" ipadd="{ip_address}"/>\n'
 
-    # Close the XML structure
+    # Cierra la estructura XML
     xml_content += "</ROBOTRING>\n</ROSIPCFG>"
     print(xml_content)
 
-    # Save the XML content to a file
-    output_file = os.path.join(folder_path, 'ROSIPCFG.xml')
-    # Save the XML content to a file
-    with open(output_file, 'w', encoding='utf-8') as file:
+    # Guarda el contenido XML en un archivo
+    full_output_path = os.path.join(folder_path, output_file)
+    with open(full_output_path, 'w', encoding='utf-8') as file:
         file.write(xml_content)
 
-    print(f"\nFile generated {output_file}")
+    print(f"\nFile generated: {full_output_path}")
     return xml_content
 
 def generate_xvr_files(df):
