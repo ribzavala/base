@@ -143,7 +143,7 @@ def process_json():
     return df
 
 
-def process_json(file_path='IP.json'):
+def ip_json(file_path='IP.json'):
     """
     Reads a specific JSON file for robot IP data, processes the robot names,
     and returns the information in a pandas DataFrame.
