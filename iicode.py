@@ -142,48 +142,106 @@ def process_json():
 
     return df
 
+
+def process_json(file_path='IP.json'):
+    """
+    Reads a specific JSON file for robot IP data, processes the robot names,
+    and returns the information in a pandas DataFrame.
+
+    The function dynamically determines the 'ZONE' (e.g., 'BTRY') from the
+    robot names, extracts the unique part of the name, and cleans it.
+
+    Parameters:
+    file_path (str): The path to the input JSON file. Defaults to 'IP.json'.
+
+    Returns:
+    pd.DataFrame: A DataFrame with 'RobotName' and 'IP' columns.
+    """
+    # A list to hold the processed robot data before creating the DataFrame
+    robot_list = []
+
+    # Read the JSON file
+    with open(file_path, 'r') as f:
+        data = json.load(f)
+
+    # Navigate through the nested JSON structure to get to the zones
+    zones = data.get("SHOP_body", {}).get("ZONE", {})
+
+    # Iterate over each zone found (e.g., "BL03 (Battery Tray)")
+    for zone_key, zone_content in zones.items():
+        robot_name_dict = zone_content.get("robot_name", {})
+
+        if not robot_name_dict:
+            continue
+
+        # --- How the name is read and processed ---
+
+        # 1. Dynamically determine the ZONE variable (e.g., 'BTRY')
+        #    We get this from the third part of the first full robot name.
+        first_full_name = list(robot_name_dict.keys())[0]
+        zone_variable = first_full_name.split('.')[2] # This will be 'BTRY'
+
+        # 2. Process each robot in the list
+        for full_name, ip in robot_name_dict.items():
+            # Get the part of the name after the ZONE variable.
+            # Splitting by the zone name is a reliable way to do this.
+            # Example: "NMR1.BL03.BTRY.002L=HL9" -> "002L=HL9"
+            name_part = full_name.split(f'.{zone_variable}.')[-1]
+
+            # 3. Clean the name part by removing the '=' character.
+            # Example: "002L=HL9" -> "002LHL9"
+            cleaned_name = name_part.replace('=', '')
+
+            robot_list.append({
+                "RobotName": cleaned_name,
+                "IP": ip
+            })
+
+    # Create the final DataFrame from the list of processed robots
+    df = pd.DataFrame(robot_list)
+    return df
+
+
 def generate_rosipcfg_xml(df, output_file='ROSIPCFG.xml'):
     """
     Generates an XML configuration file from a DataFrame containing robot data.
+    The 'Master' robot will be listed first in the XML output.
 
     Parameters:
-    df (pd.DataFrame): DataFrame containing 'RobotName' and 'IP' columns.
+    df (pd.DataFrame): DataFrame containing 'RobotName', 'IP', and 'Role' columns.
     output_file (str): The name of the output XML file (default: 'ROSIPCFG.xml').
 
     Returns:
     str: The generated XML content as a string.
     """
-    global folder_path  # Ensure the function uses the globally defined folder_path
     folder_path = 'OLP_NET1'
     os.makedirs(folder_path, exist_ok=True)
 
-    # --- CAMBIO AQUÍ ---
-    # Separa el DataFrame en Master y Slaves para forzar el orden
+    # Separate the DataFrame into Master and Slaves to enforce order.
     master_df = df[df['Role'] == 'Master']
     slaves_df = df[df['Role'] == 'Slave']
 
-    # Concatena los DataFrames, poniendo al Master primero
+    # Concatenate the DataFrames, putting the Master first.
     sorted_df = pd.concat([master_df, slaves_df], ignore_index=True)
-    # --- FIN DEL CAMBIO ---
 
-    # Extrae RobotName e IP del DataFrame ya ordenado
+    # Extract RobotName and IP from the now-sorted DataFrame.
     robot_data = sorted_df[['RobotName', 'IP']].to_dict('records')
 
-    # Construye la estructura XML como un string
+    # Build the XML structure as a string.
     xml_content = f"""<ROSIPCFG>
 <ROBOTRING count="{len(robot_data)}" timeslot="400">\n"""
 
-    # Agrega cada miembro
+    # Add each member entry.
     for robot in robot_data:
-        # Reemplaza los valores nulos (NaN) por 'NA' para un XML más limpio
+        # Replace null values (NaN) with 'NA' for a cleaner XML.
         ip_address = robot["IP"] if pd.notna(robot["IP"]) else 'NA'
         xml_content += f'    <MEMBER name="{robot["RobotName"]}" ipadd="{ip_address}"/>\n'
 
-    # Cierra la estructura XML
+    # Close the XML structure.
     xml_content += "</ROBOTRING>\n</ROSIPCFG>"
     print(xml_content)
 
-    # Guarda el contenido XML en un archivo
+    # Save the XML content to a file.
     full_output_path = os.path.join(folder_path, output_file)
     with open(full_output_path, 'w', encoding='utf-8') as file:
         file.write(xml_content)
