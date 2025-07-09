@@ -137,6 +137,9 @@ def process_json():
     columns_order = ['RobotName', 'Role'] + [col for col in df.columns if col not in ['RobotName', 'Role']]
     df = df[columns_order]
 
+    # Sort the final DataFrame by RobotName alphabetically and reset the index
+    df = df.sort_values(by='RobotName', ignore_index=True)
+
     return df
 
 def generate_rosipcfg_xml(df, output_file='ROSIPCFG.xml'):
