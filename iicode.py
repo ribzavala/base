@@ -108,7 +108,7 @@ def process_json():
 
     # Function to clean the RobotName field
     def clean_robot_name(robot_name):
-        return robot_name.replace('+', '').replace('=', '').split('-')[0]
+        return robot_name.replace('+', '').replace('=', '').split('-')[0].split('%')[0]
 
     # Clean the RobotName field for the slaves
     df['RobotName'] = df['RobotName'].apply(clean_robot_name)
