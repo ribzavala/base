@@ -143,6 +143,58 @@ def process_json():
     return df
 
 
+def generate_rosipcfg_xml(df, output_file='ROSIPCFG.xml'):
+    """
+    Generates an XML configuration file from a DataFrame containing robot data.
+    The 'Master' robot will be listed first in the XML output.
+
+    Parameters:
+    df (pd.DataFrame): DataFrame containing 'RobotName', 'IP', and 'Role' columns.
+    output_file (str): The name of the output XML file (default: 'ROSIPCFG.xml').
+
+    Returns:
+    str: The generated XML content as a string.
+    """
+    df_with_ips = ip_json()
+    df_without_ips = df.drop(columns=['IP'], errors='ignore')
+    df_updated = pd.merge(df_without_ips, df_with_ips, on='RobotName', how='left')
+
+    folder_path = 'OLP_NET1'
+    os.makedirs(folder_path, exist_ok=True)
+
+    # Separate the DataFrame into Master and Slaves to enforce order.
+    master_df = df[df['Role'] == 'Master']
+    slaves_df = df[df['Role'] == 'Slave']
+
+    # Concatenate the DataFrames, putting the Master first.
+    sorted_df = pd.concat([master_df, slaves_df], ignore_index=True)
+
+    # Extract RobotName and IP from the now-sorted DataFrame.
+    robot_data = sorted_df[['RobotName', 'IP']].to_dict('records')
+
+    # Build the XML structure as a string.
+    xml_content = f"""<ROSIPCFG>
+<ROBOTRING count="{len(robot_data)}" timeslot="400">\n"""
+
+    # Add each member entry.
+    for robot in robot_data:
+        # Replace null values (NaN) with 'NA' for a cleaner XML.
+        ip_address = robot["IP"] if pd.notna(robot["IP"]) else 'NA'
+        xml_content += f'    <MEMBER name="{robot["RobotName"]}" ipadd="{ip_address}"/>\n'
+
+    # Close the XML structure.
+    xml_content += "</ROBOTRING>\n</ROSIPCFG>"
+    print(xml_content)
+
+    # Save the XML content to a file.
+    full_output_path = os.path.join(folder_path, output_file)
+    with open(full_output_path, 'w', encoding='utf-8') as file:
+        file.write(xml_content)
+
+    print(f"\nFile generated: {full_output_path}")
+    return xml_content
+
+
 def ip_json(file_path='base/IP.json'):
     """
     Reads a specific JSON file for robot IP data, processes the robot names,
@@ -191,63 +243,9 @@ def ip_json(file_path='base/IP.json'):
             # 3. Clean the name part by removing the '=' character.
             # Example: "002L=HL9" -> "002LHL9"
             cleaned_name = name_part.replace('=', '')
-
-            robot_list.append({
-                "RobotName": cleaned_name,
-                "IP": ip
-            })
-
-    # Create the final DataFrame from the list of processed robots
+            robot_list.append({"RobotName": cleaned_name, "IP": ip})
     df = pd.DataFrame(robot_list)
     return df
-
-
-def generate_rosipcfg_xml(df, output_file='ROSIPCFG.xml'):
-    """
-    Generates an XML configuration file from a DataFrame containing robot data.
-    The 'Master' robot will be listed first in the XML output.
-
-    Parameters:
-    df (pd.DataFrame): DataFrame containing 'RobotName', 'IP', and 'Role' columns.
-    output_file (str): The name of the output XML file (default: 'ROSIPCFG.xml').
-
-    Returns:
-    str: The generated XML content as a string.
-    """
-    folder_path = 'OLP_NET1'
-    os.makedirs(folder_path, exist_ok=True)
-
-    # Separate the DataFrame into Master and Slaves to enforce order.
-    master_df = df[df['Role'] == 'Master']
-    slaves_df = df[df['Role'] == 'Slave']
-
-    # Concatenate the DataFrames, putting the Master first.
-    sorted_df = pd.concat([master_df, slaves_df], ignore_index=True)
-
-    # Extract RobotName and IP from the now-sorted DataFrame.
-    robot_data = sorted_df[['RobotName', 'IP']].to_dict('records')
-
-    # Build the XML structure as a string.
-    xml_content = f"""<ROSIPCFG>
-<ROBOTRING count="{len(robot_data)}" timeslot="400">\n"""
-
-    # Add each member entry.
-    for robot in robot_data:
-        # Replace null values (NaN) with 'NA' for a cleaner XML.
-        ip_address = robot["IP"] if pd.notna(robot["IP"]) else 'NA'
-        xml_content += f'    <MEMBER name="{robot["RobotName"]}" ipadd="{ip_address}"/>\n'
-
-    # Close the XML structure.
-    xml_content += "</ROBOTRING>\n</ROSIPCFG>"
-    print(xml_content)
-
-    # Save the XML content to a file.
-    full_output_path = os.path.join(folder_path, output_file)
-    with open(full_output_path, 'w', encoding='utf-8') as file:
-        file.write(xml_content)
-
-    print(f"\nFile generated: {full_output_path}")
-    return xml_content
 
 def generate_xvr_files(df):
     """
