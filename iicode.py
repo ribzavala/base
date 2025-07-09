@@ -155,8 +155,9 @@ def generate_rosipcfg_xml(df, output_file='ROSIPCFG.xml'):
     Returns:
     str: The generated XML content as a string.
     """
+    df_main_with_roles = process_json()
     df_with_ips = ip_json()
-    df_without_ips = df.drop(columns=['IP'], errors='ignore')
+    df_without_ips = df_main_with_roles.drop(columns=['IP'], errors='ignore')
     df_updated = pd.merge(df_without_ips, df_with_ips, on='RobotName', how='left')
 
     folder_path = 'OLP_NET1'
@@ -244,8 +245,8 @@ def ip_json(file_path='base/IP.json'):
             # Example: "002L=HL9" -> "002LHL9"
             cleaned_name = name_part.replace('=', '')
             robot_list.append({"RobotName": cleaned_name, "IP": ip})
-    df = pd.DataFrame(robot_list)
-    return df
+    df_ips = pd.DataFrame(robot_list)
+    return df_ips
 
 def generate_xvr_files(df):
     """
