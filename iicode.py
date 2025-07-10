@@ -37,42 +37,43 @@ def cloned_files(folder):
 
 def upload_images():
     """
-    Sube un único archivo .zip, lo descomprime y devuelve el nombre de la carpeta creada.
-    Ahora incluye una verificación para asegurar que el ZIP tiene una carpeta principal.
+    Sube un archivo ZIP, lo descomprime en una carpeta que se llama igual que el
+    archivo ZIP (sin la extensión), y devuelve ese nombre.
     """
-    print("--> Por favor, selecciona el archivo .ZIP que contiene tu carpeta.")
+    print("--> Por favor, selecciona tu archivo .ZIP.")
+
     uploaded = files.upload()
 
     if not uploaded:
-        print("\nOperación cancelada: No se subió ningún archivo.")
+        print("\nOperación cancelada.")
         return None
 
+    # Obtiene el nombre del archivo subido (ej: "BTRY_1_250521.zip")
     zip_name = list(uploaded.keys())[0]
 
     try:
-        with zipfile.ZipFile(zip_name, 'r') as zip_ref:
-            # Extrae el nombre de la carpeta principal
-            folder_name = os.path.commonpath(zip_ref.namelist())
+        # --- CAMBIO IMPORTANTE ---
+        # Crea el nombre de la carpeta a partir del nombre del archivo ZIP, quitándole ".zip"
+        folder_name = os.path.splitext(zip_name)[0]
 
-            # --- Verificación nueva ---
-            # Si el nombre de la carpeta está vacío, significa que el ZIP se creó incorrectamente.
-            if not folder_name:
-                print(f"\n❌ Error: El archivo ZIP '{zip_name}' no contiene una carpeta principal.")
-                print("Por favor, crea el ZIP de nuevo haciendo clic derecho sobre la CARPETA completa.")
-                os.remove(zip_name) # Limpia el archivo subido
-                return None
-            
-            # Si todo está bien, extrae los archivos
-            zip_ref.extractall()
+        # Crea la carpeta con el nuevo nombre y extrae los archivos DENTRO de ella.
+        os.makedirs(folder_name, exist_ok=True)
+        with zipfile.ZipFile(zip_name, 'r') as zip_ref:
+            zip_ref.extractall(folder_name)
 
         print(f"\n✅ Archivo '{zip_name}' descomprimido.")
-        print(f"📁 Se creó la carpeta: '{folder_name}'")
+        print(f"📁 Se guardaron los archivos en la carpeta: '{folder_name}'")
+
+        # Limpia el archivo .zip que ya no se necesita
         os.remove(zip_name)
+
+        # Devuelve el nombre de la carpeta para los siguientes pasos
         return folder_name
 
     except Exception as e:
         print(f"\n❌ Error al procesar el archivo ZIP: {e}")
         return None
+
 
 def show_image(index):
     """
