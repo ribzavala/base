@@ -285,32 +285,29 @@ def generate_iic_chk_xml(df, project_folder):
     return xml_content
 
 
-def copy_and_zip_folder():
+def copy_and_zip_folder(project_folder):
     """
-    Copies the iic_chkbase.xvr file from the base folder to the output folder
-    and zips the entire folder into a single ZIP file.
-
-    Returns:
-    None
+    Copies the iic_chkbase.xvr file from the 'base' folder into the project_folder
+    and then zips the entire project_folder for download.
     """
-    global folder_path  # Use the existing folder_path variable
-
     # Ensure the base folder and file exist
     base_folder = "base"
     base_file = os.path.join(base_folder, "iic_chkbase.xvr")
     if not os.path.exists(base_file):
-        print(f"Base file {base_file} not found. Please ensure it exists.")
+        print(f"Base file {base_file} not found. Please ensure the 'base' repository is cloned.")
         return
-
+    
     # Copy the base file to the output folder
-    destination_file = os.path.join(folder_path, "iic_chkbase.xvr")
-    os.makedirs(folder_path, exist_ok=True)  # Ensure the folder exists
+    destination_file = os.path.join(project_folder, "iic_chkbase.xvr")
+    os.makedirs(project_folder, exist_ok=True)  # Ensure the folder exists
     with open(base_file, "rb") as src, open(destination_file, "wb") as dst:
         dst.write(src.read())
     print(f"Copied {base_file} to {destination_file}")
 
     # Create a ZIP archive of the folder
-    zip_file_path = f"{folder_path}.zip"
-    os.system(f"zip -r {zip_file_path} {folder_path}")
-    print(f"ZIP file created: {zip_file_path}. Please download the file.")
+    zip_file_path = f"{project_folder}.zip"
+    os.system(f"zip -r {zip_file_path} {project_folder}")
+    
+    print(f"\n✅ All files have been processed and zipped into: {zip_file_path}")
+    print("Please download this file from the file explorer on the left.")
 
