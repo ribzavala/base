@@ -67,6 +67,29 @@ def upload_images():
         print(f"\n❌ Error al procesar el archivo ZIP: {e}")
         return None
 
+def show_image(index):
+    """
+    Displays an image by its index from the 'images' folder and prints its layout.
+
+    Parameters:
+    index (int): Index of the image to display.
+
+    Returns:
+    None
+    """
+    folder = 'images'
+    # List all valid image files in the folder
+    image_files = [f for f in os.listdir(folder) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif'))]
+
+    if 0 <= index < len(image_files):
+        img_path = os.path.join(folder, image_files[index])
+        print(f"Layout: {image_files[index]}")  # Print the filename before displaying
+        display(Image(filename=img_path))  # Display the image
+    else:
+        print(f"Index out of range. There are only {len(image_files)} images.")
+
+
+
 def process_json():
     """
     Processes a JSON file from the 'images' folder and returns a combined DataFrame
