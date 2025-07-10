@@ -347,7 +347,7 @@ def generate_iic_chk_xml(df):
     <XMLVAR version="V9.30126 2/12/2021">
       <PROG name="*SYSTEM*">
         <VAR name="{var_name}">'''
-    
+
     XML_FOOTER = '''
         </VAR>
       </PROG>
@@ -376,12 +376,13 @@ def generate_iic_chk_xml(df):
         file.write(xml_content)
 
     print(f"File generated: {output_file}")
-
-    # --- SOLUTION ---
-    # Add these lines to display the formatted XML in the output
+    
+    # --- THE FIX ---
+    # Print the formatted content directly, just like your other functions.
     print("\n--- Formatted XML Content ---")
     print(xml_content)
     
+    # Return the raw string content, maintaining consistency.
     return xml_content
 
 
