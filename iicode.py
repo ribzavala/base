@@ -46,7 +46,7 @@ def upload_images():
 
     if not uploaded:
         print("\nOperación cancelada.")
-        return # Termina la función si no se sube nada.
+        return None
 
     zip_name = list(uploaded.keys())[0]
     destination_folder = 'images' # El destino siempre será la carpeta 'images'
@@ -65,6 +65,9 @@ def upload_images():
         # Limpia el archivo .zip que ya no se necesita.
         os.remove(zip_name)
 
+        # Return the folder name for the next steps
+        return folder_name
+    
     except Exception as e:
         print(f"\n❌ Error al procesar el archivo ZIP: {e}")
 
