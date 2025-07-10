@@ -37,8 +37,8 @@ def cloned_files(folder):
 
 def upload_images():
     """
-    Sube un archivo ZIP, lo descomprime en una carpeta que se llama igual que el
-    archivo ZIP (sin la extensión), y devuelve ese nombre.
+    Sube un archivo ZIP y extrae su contenido directamente
+    en la carpeta 'images', que es donde 'show_image' busca los archivos.
     """
     print("--> Por favor, selecciona tu archivo .ZIP.")
 
@@ -46,33 +46,28 @@ def upload_images():
 
     if not uploaded:
         print("\nOperación cancelada.")
-        return None
+        return # Termina la función si no se sube nada.
 
-    # Obtiene el nombre del archivo subido (ej: "BTRY_1_250521.zip")
     zip_name = list(uploaded.keys())[0]
+    destination_folder = 'images' # El destino siempre será la carpeta 'images'
 
     try:
-        # --- CAMBIO IMPORTANTE ---
-        # Crea el nombre de la carpeta a partir del nombre del archivo ZIP, quitándole ".zip"
-        folder_name = os.path.splitext(zip_name)[0]
-
-        # Crea la carpeta con el nuevo nombre y extrae los archivos DENTRO de ella.
-        os.makedirs(folder_name, exist_ok=True)
+        # Crea la carpeta 'images' si no existe.
+        os.makedirs(destination_folder, exist_ok=True)
+        
+        # Extrae todos los archivos del ZIP directamente en la carpeta 'images'.
         with zipfile.ZipFile(zip_name, 'r') as zip_ref:
-            zip_ref.extractall(folder_name)
+            zip_ref.extractall(destination_folder)
 
         print(f"\n✅ Archivo '{zip_name}' descomprimido.")
-        print(f"📁 Se guardaron los archivos en la carpeta: '{folder_name}'")
+        print(f"📁 Se guardaron los archivos directamente en la carpeta: '{destination_folder}'")
 
-        # Limpia el archivo .zip que ya no se necesita
+        # Limpia el archivo .zip que ya no se necesita.
         os.remove(zip_name)
-
-        # Devuelve el nombre de la carpeta para los siguientes pasos
-        return folder_name
 
     except Exception as e:
         print(f"\n❌ Error al procesar el archivo ZIP: {e}")
-        return None
+
 
 
 def show_image(index):
