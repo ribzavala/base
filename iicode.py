@@ -251,22 +251,18 @@ def ip_json(file_path='base/IP.json'):
     df_ips = pd.DataFrame(robot_list)
     return df_ips
 
+
 def generate_xvr_files(df):
     """
     Generates XML files (members.xvr and calib.xvr) from a DataFrame containing robot data.
-
-    Parameters:
-    df (pd.DataFrame): DataFrame containing robot data with columns like RobotName, Role, X, Y, Z, RX, RY, RZ.
-
-    Returns:
-    None
     """
-    # Use the pre-defined folder_path variable (must be defined elsewhere in the script)
-    # Ensure folder_path exists
+    # --- SOLUTION ---
+    # Define the output folder name and create it if it doesn't exist.
+    folder_path = 'OLP_NET1'
+    os.makedirs(folder_path, exist_ok=True)
 
     # Define XML header and footer
-    XML_HEADER = '''<!-- <Rivian code gen 1.0" /> -->
-<?xml version="1.0" encoding="iso-8859-1"?>
+    XML_HEADER = '''<?xml version="1.0" encoding="iso-8859-1"?>
 <XMLVAR version="V9.30126 2/12/2021">
  <PROG name="*SYSTEM*">
   <VAR name="{var_name}">'''
