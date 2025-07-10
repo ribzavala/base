@@ -34,40 +34,50 @@ def cloned_files(folder):
 
     print(f"Successfully copied {len(valid_files)} files to the '{images_folder}' folder.")
 
-def upload_folder_from_zip():
+def upload_images():
     """
-    Prompts the user to upload a ZIP file, extracts it, and returns
-    the name of the created folder.
-
-    THIS FUNCTION WILL SHOW THE "Choose Files" BUTTON.
+    Uploads a single .zip file, unzips it, and returns the name of the created folder.
+    This is the correct method for uploading a full folder to Colab.
     """
     print("--> Please select the .ZIP file containing your folder.")
     
+    # This line opens the upload dialog
     uploaded = files.upload()
     
+    # If the user cancels the upload
     if not uploaded:
         print("\nOperation canceled: No file was uploaded.")
         return None
         
+    # Get the name of the uploaded file
     zip_name = list(uploaded.keys())[0]
     
     try:
+        # Unzip the file
         with zipfile.ZipFile(zip_name, 'r') as zip_ref:
-            # Extract contents and get the name of the top-level folder
+            # Get the name of the top-level folder inside the zip
             folder_name = os.path.commonpath(zip_ref.namelist())
             zip_ref.extractall()
         
         print(f"\n✅ Archive '{zip_name}' unzipped successfully.")
         print(f"📁 Folder created: '{folder_name}'")
         
-        # Clean up the zip file after extraction
+        # Clean up the .zip file
         os.remove(zip_name)
         
+        # Return the folder name to be used by other functions
         return folder_name
 
     except Exception as e:
-        print(f"\n❌ Error: Failed to process the ZIP file. {e}")
+        print(f"\n❌ Error: Could not process the ZIP file. {e}")
         return None
+
+# --- HOW TO USE IT ---
+# Now you can call upload_images() and it will work as expected.
+project_folder = upload_images()
+
+if project_folder:
+    print(f"\nProcess complete. The folder '{project_folder}' is ready to use.")
 
 
 def show_image(index):
