@@ -38,9 +38,9 @@ def cloned_files(folder):
 def upload_images():
     """
     Sube un único archivo .zip, lo descomprime y devuelve el nombre de la carpeta creada.
+    Ahora incluye una verificación para asegurar que el ZIP tiene una carpeta principal.
     """
     print("--> Por favor, selecciona el archivo .ZIP que contiene tu carpeta.")
-
     uploaded = files.upload()
 
     if not uploaded:
@@ -51,17 +51,23 @@ def upload_images():
 
     try:
         with zipfile.ZipFile(zip_name, 'r') as zip_ref:
-            # Extrae el contenido y obtiene el nombre de la carpeta
+            # Extrae el nombre de la carpeta principal
             folder_name = os.path.commonpath(zip_ref.namelist())
+
+            # --- Verificación nueva ---
+            # Si el nombre de la carpeta está vacío, significa que el ZIP se creó incorrectamente.
+            if not folder_name:
+                print(f"\n❌ Error: El archivo ZIP '{zip_name}' no contiene una carpeta principal.")
+                print("Por favor, crea el ZIP de nuevo haciendo clic derecho sobre la CARPETA completa.")
+                os.remove(zip_name) # Limpia el archivo subido
+                return None
+            
+            # Si todo está bien, extrae los archivos
             zip_ref.extractall()
 
         print(f"\n✅ Archivo '{zip_name}' descomprimido.")
         print(f"📁 Se creó la carpeta: '{folder_name}'")
-        
-        # Elimina el archivo .zip después de usarlo
         os.remove(zip_name)
-        
-        # Devuelve el nombre de la carpeta
         return folder_name
 
     except Exception as e:
