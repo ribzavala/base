@@ -150,7 +150,7 @@ def process_json():
     return df
 
 
-def generate_rosipcfg_xml(df, output_file='ROSIPCFG.xml'):
+def generate_rosipcfg_xml(df, my_folder,output_file='ROSIPCFG.xml'):
     """
     Generates an XML configuration file from a DataFrame containing robot data.
     The 'Master' robot will be listed first in the XML output.
@@ -167,7 +167,7 @@ def generate_rosipcfg_xml(df, output_file='ROSIPCFG.xml'):
     df_without_ips = df_main_with_roles.drop(columns=['IP'], errors='ignore')
     df_updated = pd.merge(df_without_ips, df_with_ips, on='RobotName', how='left')
 
-    folder_path = 'OLP_NET1'
+    folder_path = my_folder
     os.makedirs(folder_path, exist_ok=True)
 
     # Separate the DataFrame into Master and Slaves to enforce order.
@@ -252,13 +252,13 @@ def ip_json(file_path='base/IP.json'):
     return df_ips
 
 
-def generate_xvr_files(df):
+def generate_xvr_files(df,my_folder):
     """
     Generates XML files (members.xvr and calib.xvr) from a DataFrame containing robot data.
     """
     # --- SOLUTION ---
     # Define the output folder name and create it if it doesn't exist.
-    folder_path = 'OLP_NET1'
+    folder_path = my_folder
     os.makedirs(folder_path, exist_ok=True)
 
     # Define XML header and footer
@@ -333,13 +333,13 @@ def generate_xvr_files(df):
 
     print(f"File generated: {output_file}")
 
-def generate_iic_chk_xml(df):
+def generate_iic_chk_xml(df,my_folder):
     """
     Generates the XML file iic_chk.xvr based on a DataFrame containing robot data.
     """
     # --- SOLUTION ---
     # Define the output folder name and create it if it doesn't exist.
-    folder_path = 'OLP_NET1'
+    folder_path = my_folder
     os.makedirs(folder_path, exist_ok=True)
 
     # Define the variable name and XML header/footer
