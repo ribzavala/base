@@ -36,70 +36,36 @@ def cloned_files(folder):
 
 def upload_images():
     """
-    Uploads a single .zip file, unzips it, and returns the name of the created folder.
-    This is the correct method for uploading a full folder to Colab.
+    Sube un único archivo .zip, lo descomprime y devuelve el nombre de la carpeta creada.
     """
-    print("--> Please select the .ZIP file containing your folder.")
-    
-    # This line opens the upload dialog
+    print("--> Por favor, selecciona el archivo .ZIP que contiene tu carpeta.")
+
     uploaded = files.upload()
-    
-    # If the user cancels the upload
+
     if not uploaded:
-        print("\nOperation canceled: No file was uploaded.")
+        print("\nOperación cancelada: No se subió ningún archivo.")
         return None
-        
-    # Get the name of the uploaded file
+
     zip_name = list(uploaded.keys())[0]
-    
+
     try:
-        # Unzip the file
         with zipfile.ZipFile(zip_name, 'r') as zip_ref:
-            # Get the name of the top-level folder inside the zip
+            # Extrae el contenido y obtiene el nombre de la carpeta
             folder_name = os.path.commonpath(zip_ref.namelist())
             zip_ref.extractall()
+
+        print(f"\n✅ Archivo '{zip_name}' descomprimido.")
+        print(f"📁 Se creó la carpeta: '{folder_name}'")
         
-        print(f"\n✅ Archive '{zip_name}' unzipped successfully.")
-        print(f"📁 Folder created: '{folder_name}'")
-        
-        # Clean up the .zip file
+        # Elimina el archivo .zip después de usarlo
         os.remove(zip_name)
         
-        # Return the folder name to be used by other functions
+        # Devuelve el nombre de la carpeta
         return folder_name
 
     except Exception as e:
-        print(f"\n❌ Error: Could not process the ZIP file. {e}")
+        print(f"\n❌ Error al procesar el archivo ZIP: {e}")
         return None
-
-# --- HOW TO USE IT ---
-# Now you can call upload_images() and it will work as expected.
-project_folder = upload_images()
-
-if project_folder:
-    print(f"\nProcess complete. The folder '{project_folder}' is ready to use.")
-
-
-def show_image(index):
-    """
-    Displays an image by its index from the 'images' folder and prints its layout.
-
-    Parameters:
-    index (int): Index of the image to display.
-
-    Returns:
-    None
-    """
-    folder = 'images'
-    # List all valid image files in the folder
-    image_files = [f for f in os.listdir(folder) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif'))]
-
-    if 0 <= index < len(image_files):
-        img_path = os.path.join(folder, image_files[index])
-        print(f"Layout: {image_files[index]}")  # Print the filename before displaying
-        display(Image(filename=img_path))  # Display the image
-    else:
-        print(f"Index out of range. There are only {len(image_files)} images.")
 
 def process_json():
     """
