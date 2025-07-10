@@ -12,98 +12,63 @@ import os
 
 def cloned_files(folder):
     """
-    Copies files (images and .json) from a specified directory to the 'images' folder in the root directory.
-
-    Parameters:
-    folder (str): Path to the directory containing the files.
-
-    Returns:
-    None
+    Copies files (images and .json) from a specified directory to the 'images' folder.
     """
-    images_folder = 'images'  # Define 'images' folder in root
-
-    # Ensure the 'images' folder exists
+    images_folder = 'images'
     os.makedirs(images_folder, exist_ok=True)
 
-    # Check if the source folder exists
     if not os.path.exists(folder):
-        print(f"The specified folder '{folder}' does not exist.")
+        print(f"Error: The source folder '{folder}' does not exist in the Colab environment.")
         return
 
-    # List all valid files in the source folder (images and .json)
     valid_files = [f for f in os.listdir(folder) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif', '.json'))]
-
     if not valid_files:
-        print(f"No valid files found in the specified folder '{folder}'.")
+        print(f"No valid files found in the source folder '{folder}'.")
         return
 
-    # Copy files to the 'images' folder
     for file in valid_files:
         src_path = os.path.join(folder, file)
         dest_path = os.path.join(images_folder, file)
-        with open(src_path, 'rb') as src_file:
-            with open(dest_path, 'wb') as dest_file:
-                dest_file.write(src_file.read())
+        with open(src_path, 'rb') as src_file, open(dest_path, 'wb') as dest_file:
+            dest_file.write(src_file.read())
 
-    # Print a summary
-    print(f"Copied {len(valid_files)} files to the '{images_folder}' folder.")
+    print(f"Successfully copied {len(valid_files)} files to the '{images_folder}' folder.")
 
-def upload_and_unzip_folder():
+def upload_folder_from_zip():
     """
-    Uploads a single ZIP file, unzips it, and returns the name
-    of the created folder.
+    Prompts the user to upload a ZIP file, extracts it, and returns
+    the name of the created folder.
 
-    This is the recommended method for uploading a folder to Google Colab,
-    as direct folder uploads are not supported.
-
-    Returns:
-        str: The name of the main folder extracted from the ZIP file,
-             or None if the operation fails.
+    THIS FUNCTION WILL SHOW THE "Choose Files" BUTTON.
     """
-    print("Please select the .zip file containing your project folder.")
+    print("--> Please select the .ZIP file containing your folder.")
     
-    # 1. Upload the .zip file from your local machine
     uploaded = files.upload()
     
-    # Check if a file was actually uploaded
     if not uploaded:
-        print("\nNo file was selected. Please run the cell again.")
+        print("\nOperation canceled: No file was uploaded.")
         return None
         
-    # Get the name of the uploaded zip file
     zip_name = list(uploaded.keys())[0]
     
-    # 2. Unzip the file
     try:
         with zipfile.ZipFile(zip_name, 'r') as zip_ref:
-            # Extract all the contents into the current directory
-            zip_ref.extractall('.')
-            
-            # Get the name of the folder that was created
-            # Assumes the zip file contains a single top-level folder
+            # Extract contents and get the name of the top-level folder
             folder_name = os.path.commonpath(zip_ref.namelist())
-            
-        print(f"\nArchive '{zip_name}' unzipped successfully.")
-        print(f"Created folder: '{folder_name}'")
-
-    except zipfile.BadZipFile:
-        print(f"\nError: The file '{zip_name}' is not a valid zip file or it is corrupted.")
-        # Clean up the invalid file
+            zip_ref.extractall()
+        
+        print(f"\n✅ Archive '{zip_name}' unzipped successfully.")
+        print(f"📁 Folder created: '{folder_name}'")
+        
+        # Clean up the zip file after extraction
         os.remove(zip_name)
+        
+        return folder_name
+
+    except Exception as e:
+        print(f"\n❌ Error: Failed to process the ZIP file. {e}")
         return None
 
-    # 3. Clean up by removing the original .zip file
-    os.remove(zip_name)
-    print(f"Removed the temporary archive: '{zip_name}'.")
-    
-    return folder_name
-
-# --- How to call the function ---
-# This line will start the upload process and store the folder's name
-project_folder_name = upload_and_unzip_folder()
-
-if project_folder_name:
-    print(f"\nProcess complete. You can now use the folder named '{project_folder_name}'.")
 
 def show_image(index):
     """
