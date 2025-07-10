@@ -335,17 +335,15 @@ def generate_xvr_files(df):
 
 def generate_iic_chk_xml(df):
     """
-    Generates the XML file iic_chk.xvr based on a DataFrame containing robot data.
+    Generates the XML file iic_chk.xvr and prints its formatted content.
     """
-    # --- SOLUTION ---
     # Define the output folder name and create it if it doesn't exist.
     folder_path = 'OLP_NET1'
     os.makedirs(folder_path, exist_ok=True)
 
     # Define the variable name and XML header/footer
     var_name = "$IA_CHKCMB"
-    XML_HEADER = '''<!-- <Rivian code gen 1.0" /> -->
-    <?xml version="1.0" encoding="iso-8859-1"?>
+    XML_HEADER = '''<?xml version="1.0" encoding="iso-8859-1"?>
     <XMLVAR version="V9.30126 2/12/2021">
       <PROG name="*SYSTEM*">
         <VAR name="{var_name}">'''
@@ -372,12 +370,18 @@ def generate_iic_chk_xml(df):
     # Add the footer to the XML content
     xml_content += XML_FOOTER
 
-    # Define the output file path
+    # Define the output file path and save the file
     output_file = os.path.join(folder_path, 'iic_chk.xvr')
     with open(output_file, "w", encoding="iso-8859-1") as file:
         file.write(xml_content)
 
     print(f"File generated: {output_file}")
+
+    # --- SOLUTION ---
+    # Add these lines to display the formatted XML in the output
+    print("\n--- Formatted XML Content ---")
+    print(xml_content)
+    
     return xml_content
 
 
