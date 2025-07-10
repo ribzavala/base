@@ -139,8 +139,10 @@ def ip_json(file_path='base/IP.json'):
     return pd.DataFrame(robot_list)
 
 
-def generate_rosipcfg_xml(df, my_folder,output_file='ROSIPCFG.xml'):
- """Generates ROSIPCFG.xml inside the project_folder."""
+def generate_rosipcfg_xml(df, project_folder,output_file='ROSIPCFG.xml'):
+    """
+    Generates ROSIPCFG.xml inside the specified project_folder.
+    """
     os.makedirs(project_folder, exist_ok=True)
     master_df = df[df['Role'] == 'Master']
     slaves_df = df[df['Role'] == 'Slave']
