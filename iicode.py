@@ -336,14 +336,11 @@ def generate_xvr_files(df):
 def generate_iic_chk_xml(df):
     """
     Generates the XML file iic_chk.xvr based on a DataFrame containing robot data.
-
-    Parameters:
-    df (pd.DataFrame): DataFrame containing robot data with columns like RobotName and Role.
-
-    Returns:
-    None
     """
-    global folder_path  # Ensure the function uses the globally defined folder_path
+    # --- SOLUTION ---
+    # Define the output folder name and create it if it doesn't exist.
+    folder_path = 'OLP_NET1'
+    os.makedirs(folder_path, exist_ok=True)
 
     # Define the variable name and XML header/footer
     var_name = "$IA_CHKCMB"
@@ -380,8 +377,9 @@ def generate_iic_chk_xml(df):
     with open(output_file, "w", encoding="iso-8859-1") as file:
         file.write(xml_content)
 
-    #print(f"File generated: {output_file}")
+    print(f"File generated: {output_file}")
     return xml_content
+
 
 def copy_and_zip_folder():
     """
