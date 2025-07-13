@@ -1,15 +1,12 @@
 import os
+import ipywidgets as widgets
+from IPython.display import display
 from google.colab import files
 import zipfile
 from IPython.display import Image, display
 import pandas as pd
 import json
 
-import os
-
-import os
-
-import os
 
 def cloned_files(folder):
     """
@@ -63,6 +60,47 @@ def upload_images():
     except Exception as e:
         print(f"\n❌ Error processing ZIP file: {e}")
         return None
+
+def select_zone():
+    """
+    Creates and displays a set of dependent dropdowns for zone selection
+    and returns the widget objects.
+    """
+    # 1. Define all possible options inside the function
+    dependent_options = {
+        'BL03': [
+            'Battery_Tray', 'Battery_Deep_Lid', 'Bodyside_Outer', 'D_RING',
+            'FNLL', 'FRAMER_1', 'FRAMER_2', 'Front Door', 'Front Floor',
+            'Front Structure', 'Hang_On', 'Hood', 'Lift Gate', 'Re-Spot',
+            'Rear Door', 'Rear Floor', 'Underbody_Main'
+        ],
+        'DU04': ['Assembly', 'Auto Unload', 'Gear', 'Motor', 'Rotor'],
+        'PAINT': ['Primer', 'Top_Coat', 'Sealer']
+    }
+
+    # 2. Create the widgets
+    main_category_dropdown = widgets.Dropdown(
+        options=dependent_options.keys(),
+        description='Main Category:'
+    )
+    sub_category_dropdown = widgets.Dropdown(
+        options=dependent_options[main_category_dropdown.value],
+        description='Sub-Category:'
+    )
+
+    # 3. Define the nested update function
+    def on_main_category_change(change):
+        sub_category_dropdown.options = dependent_options[change['new']]
+
+    # 4. Link the function to the first dropdown
+    main_category_dropdown.observe(on_main_category_change, names='value')
+
+    # 5. Display the widgets
+    print("Select a category to see its sub-categories:")
+    display(widgets.VBox([main_category_dropdown, sub_category_dropdown]))
+
+    # 6. Return the widget objects so you can access their values later
+    return main_category_dropdown, sub_category_dropdown
 
 
 def show_image(project_folder,index):
