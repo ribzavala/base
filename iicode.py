@@ -79,28 +79,28 @@ def select_zone():
     }
 
     # 2. Create the widgets
-    main_category_dropdown = widgets.Dropdown(
+    main_selection = widgets.Dropdown(
         options=dependent_options.keys(),
         description='Main Category:'
     )
-    sub_category_dropdown = widgets.Dropdown(
-        options=dependent_options[main_category_dropdown.value],
+    sub_selection = widgets.Dropdown(
+        options=dependent_options[main_selection.value],
         description='Sub-Category:'
     )
 
     # 3. Define the nested update function
     def on_main_category_change(change):
-        sub_category_dropdown.options = dependent_options[change['new']]
+        sub_selection.options = dependent_options[change['new']]
 
     # 4. Link the function to the first dropdown
-    main_category_dropdown.observe(on_main_category_change, names='value')
+    main_selection.observe(on_main_category_change, names='value')
 
     # 5. Display the widgets
     print("Select a category to see its sub-categories:")
-    display(widgets.VBox([main_category_dropdown, sub_category_dropdown]))
+    display(widgets.VBox([main_selection, sub_selection]))
 
     # 6. Return the widget objects so you can access their values later
-    return main_category_dropdown, sub_category_dropdown
+    return main_selection, sub_selection
 
 
 def show_image(project_folder,index):
