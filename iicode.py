@@ -37,7 +37,7 @@ def upload_images():
     Sube un archivo ZIP y extrae su contenido directamente
     en la carpeta 'images', que es donde 'show_image' busca los archivos.
     """
-    print("--> Por favor, selecciona tu archivo .ZIP.")
+    print("--> Select your .ZIP.")
 
     uploaded = files.upload()
 
