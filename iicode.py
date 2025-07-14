@@ -117,9 +117,12 @@ def show_image(project_folder,index):
 
 
 
-def process_json(project_folder):
+def process_json(project_folder,main_selection, sub_selection):
     """
-    Processes the JSON file from the specified project_folder.
+    Processes the JSON file from the specified project_folder and merges
+    it with the filtered IP data based on user selection.
+    
+    NOTE: The function signature has been updated to accept dropdown selections.
     """
     try:
         json_file_name = [f for f in os.listdir(project_folder) if f.endswith('.json')][0]
@@ -151,29 +154,56 @@ def process_json(project_folder):
     df['Role'] = 'Slave'
     combined_df = pd.concat([df_master, df], ignore_index=True)
     
-    # Merge with external IP data
-    ip_df = ip_json() # Assumes base/IP.json exists from git clone
+    # MODIFICATION: Call ip_json with the user's selections from the dropdowns.
+    # This assumes 'IP.json' is in the same directory.
+    # If it is in a 'base' folder, change the path to 'base/IP.json'.
+    ip_df = ip_json(main_selection, sub_selection, file_path='IP.json') 
     final_df = pd.merge(combined_df.drop(columns=['IP'], errors='ignore'), ip_df, on='RobotName', how='left')
-    
+
     final_df = final_df.sort_values(by='RobotName', ignore_index=True)
     return final_df
 
 
-def ip_json(file_path='base/IP.json'):
-    """Reads robot IP data from the 'base' directory."""
+def ip_json(main_selection, sub_selection, file_path='IP.json'):
+    """
+    Reads robot IP data from the provided JSON file, filtering by the selected zone.
+
+    NOTE: The function signature and logic have been updated to filter
+    based on the main and sub category selections.
+    """
     robot_list = []
-    with open(file_path, 'r') as f:
-        data = json.load(f)
+    # Construct the search key from the dropdown selections.
+    # Example: 'BL03' + ' ' + 'Battery_Tray' -> 'BL03 Battery_Tray'
+    search_key = f"{main_selection} {sub_selection}"
+
+    try:
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        print(f"Error: The IP file was not found at '{file_path}'.")
+        return pd.DataFrame()
+
     zones = data.get("SHOP_body", {}).get("ZONE", {})
+    
+    # Iterate through all zones in the JSON file.
     for zone_key, zone_content in zones.items():
-        robot_name_dict = zone_content.get("robot_name", {})
-        if not robot_name_dict: continue
-        first_full_name = list(robot_name_dict.keys())[0]
-        zone_variable = first_full_name.split('.')[2]
-        for full_name, ip in robot_name_dict.items():
-            name_part = full_name.split(f'.{zone_variable}.')[-1]
-            cleaned_name = name_part.replace('=', '')
-            robot_list.append({"RobotName": cleaned_name, "IP": ip})
+        # Check if the current zone_key from the file starts with the desired search_key.
+        # This handles cases like 'Bodyside_Outer' matching both
+        # 'BL03 Bodyside_Outer_Left' and 'BL03 Bodyside_Outer_Right'.
+        if zone_key.startswith(search_key):
+            robot_name_dict = zone_content.get("robot_name", {})
+            if not robot_name_dict: continue
+
+            # The following logic for parsing robot names is kept from your original function.
+            first_full_name = list(robot_name_dict.keys())[0]
+            zone_variable = first_full_name.split('.')[2]
+
+            for full_name, ip in robot_name_dict.items():
+                name_part = full_name.split(f'.{zone_variable}.')[-1]
+                # Added .strip() to remove potential leading/trailing spaces.
+                cleaned_name = name_part.replace('=', '').strip()
+                robot_list.append({"RobotName": cleaned_name, "IP": ip})
+                
     return pd.DataFrame(robot_list)
 
 
