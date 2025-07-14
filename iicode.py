@@ -174,7 +174,7 @@ def ip_json(main_selection, sub_selection, file_path='base/IP.json'):
     robot_list = []
     # Construct the search key from the dropdown selections.
     # Example: 'BL03' + ' ' + 'Battery_Tray' -> 'BL03 Battery_Tray'
-    search_key = f"{main_selection} {sub_selection}"
+    search_key = f"{main_selection}_{sub_selection}"
 
     try:
         with open(file_path, 'r') as f:
