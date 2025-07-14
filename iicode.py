@@ -157,7 +157,7 @@ def process_json(project_folder,main_selection, sub_selection):
     # MODIFICATION: Call ip_json with the user's selections from the dropdowns.
     # This assumes 'IP.json' is in the same directory.
     # If it is in a 'base' folder, change the path to 'base/IP.json'.
-    ip_df = ip_json(main_selection, sub_selection, file_path='IP.json') 
+    ip_df = ip_json(main_selection, sub_selection, file_path='base/IP.json') 
     final_df = pd.merge(combined_df.drop(columns=['IP'], errors='ignore'), ip_df, on='RobotName', how='left')
 
     final_df = final_df.sort_values(by='RobotName', ignore_index=True)
