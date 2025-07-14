@@ -164,7 +164,7 @@ def process_json(project_folder,main_selection, sub_selection):
     return final_df
 
 
-def ip_json(main_selection, sub_selection, file_path='/base/IP.json'):
+def ip_json(main_selection, sub_selection, file_path='base/IP.json'):
     """
     Reads robot IP data from the provided JSON file, filtering by the selected zone.
 
