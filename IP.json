@@ -358,7 +358,7 @@
             "NRM1.BL03.GATE.075=HL9": "192.19.182.13"
           }
         },
-        "BL03_Re-Spot": {
+        "BL03_Re_Spot": {
           "robot_name": {
             "NRM1.BL03.RSPT.010=HL1": "192.19.160.2",
             "NRM1.BL03.RSPT.010=HL2": "192.19.160.3",

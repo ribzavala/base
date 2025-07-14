@@ -70,9 +70,9 @@ def select_zone():
     dependent_options = {
         'BL03': [
             'Battery_Tray', 'Battery_Deep_Lid', 'Bodyside_Outer', 'D_RING',
-            'FNLL', 'FRAMER_1', 'FRAMER_2', 'Front Door', 'Front Floor',
-            'Front Structure', 'Hang_On', 'Hood', 'Lift Gate', 'Re-Spot',
-            'Rear Door', 'Rear Floor', 'Underbody_Main'
+            'FNLL', 'FRAMER_1', 'FRAMER_2', 'Front_Door', 'Front_Floor',
+            'Front_Structure', 'Hang_On', 'Hood', 'Lift_Gate', 'Re_Spot',
+            'Rear_Door', 'Rear_Floor', 'Underbody_Main'
         ],
         'DU04': ['Assembly', 'Auto Unload', 'Gear', 'Motor', 'Rotor'],
         'PAINT': ['Primer', 'Top_Coat', 'Sealer']
@@ -201,7 +201,7 @@ def ip_json(main_selection, sub_selection, file_path='base/IP.json'):
             for full_name, ip in robot_name_dict.items():
                 name_part = full_name.split(f'.{zone_variable}.')[-1]
                 # Added .strip() to remove potential leading/trailing spaces.
-                cleaned_name = name_part.replace('=', '').strip()
+                cleaned_name = name_part.replace('+', '').replace('=', '').split('-')[0].split('%')[0].strip()
                 robot_list.append({"RobotName": cleaned_name, "IP": ip})
                 
     return pd.DataFrame(robot_list)
