@@ -124,6 +124,8 @@ def process_json(project_folder,main_selection, sub_selection):
     
     NOTE: The function signature has been updated to accept dropdown selections.
     """
+    main_value = main_selection.value
+    sub_value = sub_selection.value
     try:
         json_file_name = [f for f in os.listdir(project_folder) if f.endswith('.json')][0]
         json_path = os.path.join(project_folder, json_file_name)
