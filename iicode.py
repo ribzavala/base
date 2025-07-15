@@ -2,7 +2,6 @@ import os
 import ipywidgets as widgets
 from IPython.display import display
 from google.colab import files
-import zipfile
 import py7zr
 from IPython.display import Image, display
 import pandas as pd
