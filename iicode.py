@@ -3,6 +3,7 @@ import ipywidgets as widgets
 from IPython.display import display
 from google.colab import files
 import zipfile
+import py7zr
 from IPython.display import Image, display
 import pandas as pd
 import json
@@ -33,16 +34,13 @@ def cloned_files(folder):
     print(f"Successfully copied {len(valid_files)} files to the '{images_folder}' folder.")
 
 def upload_images():
-    """
-    Sube un archivo ZIP y extrae su contenido directamente
-    en la carpeta 'images', que es donde 'show_image' busca los archivos.
-    """
-    print("--> Select your .ZIP.")
+
+    print("--> Select your .ZIP or .7z file.")
 
     uploaded = files.upload()
 
     if not uploaded:
-        print("\nOperación cancelada.")
+        print("\ncanceled.")
         return None
 
     zip_name = list(uploaded.keys())[0]
@@ -50,15 +48,25 @@ def upload_images():
 
     try:
         os.makedirs(project_folder, exist_ok=True)
-        with zipfile.ZipFile(zip_name, 'r') as zip_ref:
-            zip_ref.extractall(project_folder)
+
+        # Check the file extension and use the appropriate extractor
+        if zip_name.endswith('.zip'):
+            with zipfile.ZipFile(zip_name, 'r') as zip_ref:
+                zip_ref.extractall(project_folder)
+        elif zip_name.endswith('.7z'):
+            with py7zr.SevenZipFile(zip_name, mode='r') as z:
+                z.extractall(path=project_folder)
+        else:
+            print(f"\n❌ Unsupported file format. Please upload a .zip or .7z file.")
+            os.remove(zip_name)
+            return None
 
         print(f"\n✅ Files extracted to project folder: '{project_folder}'")
         os.remove(zip_name)
         return project_folder
 
     except Exception as e:
-        print(f"\n❌ Error processing ZIP file: {e}")
+        print(f"\n❌ Error processing file: {e}")
         return None
 
 def select_zone():
@@ -313,40 +321,48 @@ def generate_xvr_files(df, project_folder):
 def generate_iic_chk_xml(df, project_folder):
     """
     Generates the XML file iic_chk.xvr based on a DataFrame containing robot data.
+    This version creates entries for both $IA_CHKCMB and $IB_CHKCMB variables.
     """
     os.makedirs(project_folder, exist_ok=True)
 
-    # Define the variable name and XML header/footer
-    var_name = "$IA_CHKCMB"
-    XML_HEADER = '''<!-- <Rivian code gen 1.0" /> -->
-    <?xml version="1.0" encoding="iso-8859-1"?>
-    <XMLVAR version="V9.30126 2/12/2021">
-      <PROG name="*SYSTEM*">
-        <VAR name="{var_name}">'''
+    # The requested comment is the very first line of this string.
+    XML_HEADER = '''<?xml version="1.0" encoding="iso-8859-1"?>
+<XMLVAR version="V9.30126 2/12/2021">
+    <PROG name="*SYSTEM*">'''
     
     XML_FOOTER = '''
-        </VAR>
-      </PROG>
-    </XMLVAR>
-    '''
+    </PROG>
+</XMLVAR>
+'''
 
-    # Start building the XML content
-    xml_content = XML_HEADER.format(var_name=var_name)
+    xml_content = XML_HEADER
 
-    # Dynamically construct ARRAY sections for the specific structure
+    # --- Block for the first variable: $IA_CHKCMB ---
+    var_name_ia = "$IA_CHKCMB"
+    xml_content += f'\n        <VAR name="{var_name_ia}">'
     for index, row in df.iterrows():
         member_id = index + 1
         member_name = row['RobotName']
-
         xml_content += f"""
-        <ARRAY name = "{var_name}[{member_id}]">
-        <FIELD name="$R_CNTLR" prot ="RW">{member_name}</FIELD>
-        </ARRAY>"""
+            <ARRAY name = "{var_name_ia}[{member_id}]">
+                <FIELD name="$R_CNTLR" prot ="RW">{member_name}</FIELD>
+            </ARRAY>"""
+    xml_content += '\n        </VAR>'
 
-    # Add the footer to the XML content
+    # --- Block for the second variable: $IB_CHKCMB ---
+    var_name_ib = "$IB_CHKCMB"
+    xml_content += f'\n        <VAR name="{var_name_ib}">'
+    for index, row in df.iterrows():
+        member_id = index + 1
+        member_name = row['RobotName']
+        xml_content += f"""
+            <ARRAY name = "{var_name_ib}[{member_id}]">
+                <FIELD name="$R_CNTLR" prot ="RW">{member_name}</FIELD>
+            </ARRAY>"""
+    xml_content += '\n        </VAR>'
+
     xml_content += XML_FOOTER
 
-    # Define the output file path
     output_file = os.path.join(project_folder, 'iic_chk.xvr')
     with open(output_file, "w", encoding="iso-8859-1") as file:
         file.write(xml_content)
