@@ -225,7 +225,8 @@ def generate_rosipcfg_xml(df, project_folder,output_file='ROSIPCFG.xml'):
     slaves_df = df[df['Role'] == 'Slave']
     sorted_df = pd.concat([master_df, slaves_df], ignore_index=True)
     robot_data = sorted_df[['RobotName', 'IP']].to_dict('records')
-    xml_content = f'<ROSIPCFG>\n<ROBOTRING count="{len(robot_data)}" timeslot="400">\n'
+
+    xml_content = f'<!-- <Rivian iic setup /> -->\n<ROSIPCFG>\n<ROBOTRING count="{len(robot_data)}" timeslot="400">\n'
     for robot in robot_data:
         ip_address = robot["IP"] if pd.notna(robot["IP"]) else 'NA'
         xml_content += f'    <MEMBER name="{robot["RobotName"]}" ipadd="{ip_address}"/>\n'
@@ -234,8 +235,8 @@ def generate_rosipcfg_xml(df, project_folder,output_file='ROSIPCFG.xml'):
     full_output_path = os.path.join(project_folder, output_file)
     with open(full_output_path, 'w', encoding='utf-8') as file:
         file.write(xml_content)
+
     print(f"File generated: {full_output_path}")
-    print("\n--- Formatted XML Content ---")
     print(xml_content)
 
 
@@ -268,7 +269,8 @@ def generate_xvr_files(df, project_folder):
     for index, row in df.iterrows():
         role = row['Role']
         member_id = index + 1
-        zmgr_name = row['RobotName'] if role == 'Master' else '********'
+        # MODIFICATION: This line was changed to ensure 'zmgr_name' is always populated.
+        zmgr_name = row['RobotName'] 
         member_name = row['RobotName']
 
         xml_content += f'''
@@ -280,12 +282,11 @@ def generate_xvr_files(df, project_folder):
     </ARRAY>'''
 
     xml_content += XML_FOOTER
-
     output_file = os.path.join(project_folder, 'members.xvr')
     with open(output_file, "w", encoding="iso-8859-1") as file:
         file.write(xml_content)
-
     print(f"File generated: {output_file}")
+
 
     # Generate calib.xvr
     var_name = "$IC_AZ_CALIB"
@@ -294,7 +295,8 @@ def generate_xvr_files(df, project_folder):
     for index, row in df.iterrows():
         role = row['Role']
         member_id = index + 1
-        calib_done = "TRUE" if role == "Master" else "FALSE"
+        # NEW MODIFICATION: This line was changed to set '$CALIB_DONE' to TRUE for all members.
+        calib_done = "TRUE"
         x_value, y_value, z_value = map(format_value, [row['X'], row['Y'], row['Z']])
         rx_value, ry_value, rz_value = map(format_value, [row['RX'], row['RY'], row['RZ']])
 
@@ -316,6 +318,9 @@ def generate_xvr_files(df, project_folder):
         file.write(xml_content)
 
     print(f"File generated: {output_file}")
+
+
+
 
 def generate_iic_chk_xml(df, project_folder):
     """
