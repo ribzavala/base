@@ -6,7 +6,15 @@ import zipfile
 from IPython.display import Image, display
 import pandas as pd
 import json
+import datetime
+# --- Global Configuration ---
+VERSION = "V1.0"
 
+
+
+def get_timestamp():
+    """Generates a formatted timestamp string (e.g., '2025-07-20 16:11:11')."""
+    return datetime.datetime.now().strftime("%m-%d %H:%M")
 
 def cloned_files(folder):
     """
@@ -218,15 +226,16 @@ def ip_json(main_selection, sub_selection, file_path='base/IP.json'):
 
 def generate_rosipcfg_xml(df, project_folder,output_file='ROSIPCFG.xml'):
     """
-    Generates ROSIPCFG.xml inside the specified project_folder.
+    Generates ROSIPCFG.xml.
     """
+    current_time = get_timestamp()
     os.makedirs(project_folder, exist_ok=True)
     master_df = df[df['Role'] == 'Master']
     slaves_df = df[df['Role'] == 'Slave']
     sorted_df = pd.concat([master_df, slaves_df], ignore_index=True)
     robot_data = sorted_df[['RobotName', 'IP']].to_dict('records')
 
-    xml_content = f'<!-- <Rivian AG V1.0 - iic setup /> -->\n<ROSIPCFG>\n<ROBOTRING count="{len(robot_data)}" timeslot="400">\n'
+    xml_content = f'<!-- <Rivian AG {VERSION} - {ip_address} iic setup /> -->\n<ROSIPCFG>\n<ROBOTRING count="{len(robot_data)}" timeslot="400">\n'
     for robot in robot_data:
         ip_address = robot["IP"] if pd.notna(robot["IP"]) else 'NA'
         xml_content += f'    <MEMBER name="{robot["RobotName"]}" ipadd="{ip_address}"/>\n'
@@ -250,7 +259,7 @@ def generate_xvr_files(df, project_folder):
     os.makedirs(project_folder, exist_ok=True)
 
     # --- XML Structure ---
-    XML_HEADER = '''<!-- <Rivian AG V1.0 - iic setup /> -->\n<?xml version="1.0" encoding="iso-8859-1"?>
+    XML_HEADER = '''<!-- <Rivian AG {VERSION} - {ip_address} iic setup /> -->\n<?xml version="1.0" encoding="iso-8859-1"?>
 <XMLVAR version="V9.30126 2/12/2021">
     <PROG name="*SYSTEM*">'''
 
@@ -262,10 +271,10 @@ def generate_xvr_files(df, project_folder):
     def format_value(value):
         return "0.000000" if value == "NA" else value
 
-    # --- Start building the XML content ---
+    # --- building the XML content ---
     xml_content = XML_HEADER
 
-    # --- Block 1: $IC_AZ_MEMBR (with corrections) ---
+    # --- Block 1: $IC_AZ_MEMBR ---
     var_name_membr = "$IC_AZ_MEMBR"
     xml_content += f'\n        <VAR name="{var_name_membr}">'
     for index, row in df.iterrows():
@@ -281,7 +290,7 @@ def generate_xvr_files(df, project_folder):
             </ARRAY>'''
     xml_content += '\n        </VAR>'
 
-    # --- Block 2: $IC_AZ_CALIB (with corrections) ---
+    # --- Block 2: $IC_AZ_CALIB ---
     var_name_calib = "$IC_AZ_CALIB"
     xml_content += f'\n        <VAR name="{var_name_calib}">'
     for index, row in df.iterrows():
@@ -300,37 +309,7 @@ def generate_xvr_files(df, project_folder):
             </ARRAY>'''
     xml_content += '\n        </VAR>'
 
-    # --- Finalize and write the single file ---
-    xml_content += XML_FOOTER
-    
-    # This function now only creates one file.
-    output_file = os.path.join(project_folder, 'calibration.xvr')
-    with open(output_file, "w", encoding="iso-8859-1") as file:
-        file.write(xml_content)
-
-    print(f"file generated: {output_file}")
-
-
-def generate_iic_chk_xml(df, project_folder):
-    """
-    Generates the XML file iic_chk.xvr based on a DataFrame containing robot data.
-    This version creates entries for both $IA_CHKCMB and $IB_CHKCMB variables.
-    """
-    os.makedirs(project_folder, exist_ok=True)
-
-    # The requested comment is the very first line of this string.
-    XML_HEADER = '''<!-- <Rivian AG V1.0 - iic setup /> -->\n<?xml version="1.0" encoding="iso-8859-1"?>
-<XMLVAR version="V9.30126 2/12/2021">
-    <PROG name="*SYSTEM*">'''
-    
-    XML_FOOTER = '''
-    </PROG>
-</XMLVAR>
-'''
-
-    xml_content = XML_HEADER
-
-    # --- Block for the first variable: $IA_CHKCMB ---
+    # --- Block 3: $IA_CHKCMB  ---
     var_name_ia = "$IA_CHKCMB"
     xml_content += f'\n        <VAR name="{var_name_ia}">'
     for index, row in df.iterrows():
@@ -342,7 +321,7 @@ def generate_iic_chk_xml(df, project_folder):
             </ARRAY>"""
     xml_content += '\n        </VAR>'
 
-    # --- Block for the second variable: $IB_CHKCMB ---
+    # --- Block 4: $IB_CHKCMB  ---
     var_name_ib = "$IB_CHKCMB"
     xml_content += f'\n        <VAR name="{var_name_ib}">'
     for index, row in df.iterrows():
@@ -354,14 +333,14 @@ def generate_iic_chk_xml(df, project_folder):
             </ARRAY>"""
     xml_content += '\n        </VAR>'
 
+    # --- Finalize and write the single file ---
     xml_content += XML_FOOTER
-
-    output_file = os.path.join(project_folder, 'iic_chk.xvr')
+    
+    # This function now only creates one file.
+    output_file = os.path.join(project_folder, 'calibration.xvr')
     with open(output_file, "w", encoding="iso-8859-1") as file:
         file.write(xml_content)
-
-    print(f"File generated: {output_file}")
-    return xml_content
+    print(f"file generated: {output_file}")
 
 
 def copy_and_zip_folder(project_folder):
@@ -384,7 +363,7 @@ def copy_and_zip_folder(project_folder):
     print(f"Copied {base_file} to {destination_file}")
 
     # Create a ZIP archive of the folder
-    zip_file_path = f"IIC_AG{project_folder}.zip"
+    zip_file_path = f"IIC_AG_{project_folder}.zip"
     os.system(f"zip -r {zip_file_path} {project_folder}")
     
     print(f"\n✅ All files have been processed and zipped into: {zip_file_path}")
