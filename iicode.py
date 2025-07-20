@@ -262,7 +262,7 @@ def generate_xvr_files(df, project_folder):
     os.makedirs(project_folder, exist_ok=True)
 
     # --- XML Structure ---
-    XML_HEADER = '''<!-- <Rivian AG {VERSION} - {ip_address} iic setup /> -->\n<?xml version="1.0" encoding="iso-8859-1"?>
+    XML_HEADER = f'''<!-- <Rivian AG {VERSION} - {current_time} iic setup /> -->\n<?xml version="1.0" encoding="iso-8859-1"?>
 <XMLVAR version="V9.30126 2/12/2021">
     <PROG name="*SYSTEM*">'''
 
@@ -343,10 +343,16 @@ def generate_xvr_files(df, project_folder):
     output_file = os.path.join(project_folder, 'calibration.xvr')
     with open(output_file, "w", encoding="iso-8859-1") as file:
         file.write(xml_content)
+   
+     
+    print(f"$IC_AZ_CALIB")
+    print(f"$IC_AZ_MEMBR")
+    print(f"$IA_CHKCMB")
     print(f"file generated: {output_file}")
 
 
 def copy_and_zip_folder(project_folder):
+
     """
     Copies the iic_chkbase.xvr file from the 'base' folder into the project_folder
     and then zips the entire project_folder for download.
