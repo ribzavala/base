@@ -228,6 +228,7 @@ def generate_rosipcfg_xml(df, project_folder,output_file='ROSIPCFG.xml'):
     """
     Generates ROSIPCFG.xml.
     """
+    VERSION = "V1.0"
     current_time = get_timestamp()
     os.makedirs(project_folder, exist_ok=True)
     master_df = df[df['Role'] == 'Master']
@@ -235,7 +236,7 @@ def generate_rosipcfg_xml(df, project_folder,output_file='ROSIPCFG.xml'):
     sorted_df = pd.concat([master_df, slaves_df], ignore_index=True)
     robot_data = sorted_df[['RobotName', 'IP']].to_dict('records')
 
-    xml_content = f'<!-- <Rivian AG {VERSION} - {ip_address} iic setup /> -->\n<ROSIPCFG>\n<ROBOTRING count="{len(robot_data)}" timeslot="400">\n'
+    xml_content = f'<!-- <Rivian AG {VERSION} - {current_time} -iic setup /> -->\n<ROSIPCFG>\n<ROBOTRING count="{len(robot_data)}" timeslot="400">\n'
     for robot in robot_data:
         ip_address = robot["IP"] if pd.notna(robot["IP"]) else 'NA'
         xml_content += f'    <MEMBER name="{robot["RobotName"]}" ipadd="{ip_address}"/>\n'
@@ -256,6 +257,8 @@ def generate_xvr_files(df, project_folder):
     Generates a single, combined XML file (members.xvr) containing both the
     $IC_AZ_MEMBR and $IC_AZ_CALIB variable configurations.
     """
+    VERSION = "V1.0"
+    current_time = get_timestamp()
     os.makedirs(project_folder, exist_ok=True)
 
     # --- XML Structure ---
