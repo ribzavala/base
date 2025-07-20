@@ -308,7 +308,7 @@ def generate_xvr_files(df, project_folder):
     with open(output_file, "w", encoding="iso-8859-1") as file:
         file.write(xml_content)
 
-    print(f"Combined file generated: {output_file}")
+    print(f"file generated: {output_file}")
 
 
 def generate_iic_chk_xml(df, project_folder):
@@ -319,7 +319,7 @@ def generate_iic_chk_xml(df, project_folder):
     os.makedirs(project_folder, exist_ok=True)
 
     # The requested comment is the very first line of this string.
-    XML_HEADER = '''<?xml version="1.0" encoding="iso-8859-1"?>
+    XML_HEADER = '''<!-- <Rivian AG V1.0 - iic setup /> -->\n<?xml version="1.0" encoding="iso-8859-1"?>
 <XMLVAR version="V9.30126 2/12/2021">
     <PROG name="*SYSTEM*">'''
     
@@ -384,7 +384,7 @@ def copy_and_zip_folder(project_folder):
     print(f"Copied {base_file} to {destination_file}")
 
     # Create a ZIP archive of the folder
-    zip_file_path = f"{project_folder}.zip"
+    zip_file_path = f"IIC_AG{project_folder}.zip"
     os.system(f"zip -r {zip_file_path} {project_folder}")
     
     print(f"\n✅ All files have been processed and zipped into: {zip_file_path}")
