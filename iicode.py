@@ -261,6 +261,13 @@ def generate_xvr_files(df, project_folder):
     current_time = get_timestamp()
     os.makedirs(project_folder, exist_ok=True)
 
+        # --- ADD THIS SORTING LOGIC ---
+    # This is the same logic from your first function.
+    master_df = df[df['Role'] == 'Master']
+    slaves_df = df[df['Role'] == 'Slave']
+    sorted_df = pd.concat([master_df, slaves_df], ignore_index=True)
+    # --- END OF ADDED LOGIC ---
+
     # --- XML Structure ---
     XML_HEADER = f'''<!-- <Rivian AG {VERSION} - {current_time} iic setup /> -->\n<?xml version="1.0" encoding="iso-8859-1"?>
 <XMLVAR version="V9.30126 2/12/2021">
