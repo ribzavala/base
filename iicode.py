@@ -8,7 +8,7 @@ import pandas as pd
 import json
 import datetime
 # --- Global Configuration ---
-VERSION = "V1.0"
+VERSION = "V2.0"
 
 
 
@@ -228,7 +228,7 @@ def generate_rosipcfg_xml(df, project_folder,output_file='ROSIPCFG.xml'):
     """
     Generates ROSIPCFG.xml.
     """
-    VERSION = "V1.0"
+    VERSION = "V2.0"
     current_time = get_timestamp()
     os.makedirs(project_folder, exist_ok=True)
     master_df = df[df['Role'] == 'Master']
@@ -257,7 +257,7 @@ def generate_xvr_files(df, project_folder):
     Generates a single, combined XML file (members.xvr) containing both the
     $IC_AZ_MEMBR and $IC_AZ_CALIB variable configurations.
     """
-    VERSION = "V1.0"
+    VERSION = "V2.0"
     current_time = get_timestamp()
     os.makedirs(project_folder, exist_ok=True)
 
