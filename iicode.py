@@ -261,12 +261,12 @@ def generate_xvr_files(df, project_folder):
     current_time = get_timestamp()
     os.makedirs(project_folder, exist_ok=True)
 
-        # --- ADD THIS SORTING LOGIC ---
-    # This is the same logic from your first function.
+
+
     master_df = df[df['Role'] == 'Master']
     slaves_df = df[df['Role'] == 'Slave']
     sorted_df = pd.concat([master_df, slaves_df], ignore_index=True)
-    # --- END OF ADDED LOGIC ---
+   
 
     # --- XML Structure ---
     XML_HEADER = f'''<!-- <Rivian AG {VERSION} - {current_time} iic setup /> -->\n<?xml version="1.0" encoding="iso-8859-1"?>
@@ -287,7 +287,7 @@ def generate_xvr_files(df, project_folder):
     # --- Block 1: $IC_AZ_MEMBR ---
     var_name_membr = "$IC_AZ_MEMBR"
     xml_content += f'\n        <VAR name="{var_name_membr}">'
-    for index, row in df.iterrows():
+    for index, row in sorted_df.iterrows():
         member_id = index + 1
         robot_name = row['RobotName']
         role = row['Role']
@@ -303,7 +303,7 @@ def generate_xvr_files(df, project_folder):
     # --- Block 2: $IC_AZ_CALIB ---
     var_name_calib = "$IC_AZ_CALIB"
     xml_content += f'\n        <VAR name="{var_name_calib}">'
-    for index, row in df.iterrows():
+    for index, row in sorted_df.iterrows():
         member_id = index + 1
         x_value, y_value, z_value = map(format_value, [row['X'], row['Y'], row['Z']])
         rx_value, ry_value, rz_value = map(format_value, [row['RX'], row['RY'], row['RZ']])
@@ -322,7 +322,7 @@ def generate_xvr_files(df, project_folder):
     # --- Block 3: $IA_CHKCMB  ---
     var_name_ia = "$IA_CHKCMB"
     xml_content += f'\n        <VAR name="{var_name_ia}">'
-    for index, row in df.iterrows():
+    for index, row in sorted_df.iterrows():
         member_id = index + 1
         member_name = row['RobotName']
         xml_content += f"""
@@ -334,7 +334,7 @@ def generate_xvr_files(df, project_folder):
     # --- Block 4: $IB_CHKCMB  ---
     var_name_ib = "$IB_CHKCMB"
     xml_content += f'\n        <VAR name="{var_name_ib}">'
-    for index, row in df.iterrows():
+    for index, row in sorted_df.iterrows():
         member_id = index + 1
         member_name = row['RobotName']
         xml_content += f"""
