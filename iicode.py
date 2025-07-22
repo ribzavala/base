@@ -303,6 +303,9 @@ def generate_xvr_files(df, project_folder):
     # --- Block 2: $IC_AZ_CALIB ---
     var_name_calib = "$IC_AZ_CALIB"
     xml_content += f'\n        <VAR name="{var_name_calib}">'
+
+    master_robot_name = sorted_df.iloc[0]['RobotName']
+
     for index, row in sorted_df.iterrows():
         member_id = index + 1
         x_value, y_value, z_value = map(format_value, [row['X'], row['Y'], row['Z']])
@@ -314,7 +317,7 @@ def generate_xvr_files(df, project_folder):
    gnum: 1 rep: 1 axes: 0 utool: 255 uframe: 255 Config: N D B, 0, 0, 0
    X:       {x_value}   Y:       {y_value}   Z:       {z_value}
    W:       {rx_value}   P:       {ry_value}   R:       {rz_value}</FIELD>
-                <FIELD name="$ROB1_NAME" prot ="RW">{df.iloc[0]['RobotName']}</FIELD>
+                <FIELD name="$ROB1_NAME" prot ="RW">{master_robot_name}</FIELD>
                 <FIELD name="$ROB2_NAME" prot ="RW">{row['RobotName']}</FIELD>
             </ARRAY>'''
     xml_content += '\n        </VAR>'
