@@ -154,7 +154,7 @@ def process_json(project_folder,main_selection, sub_selection):
     df = pd.DataFrame(measurements)
 
     def clean_robot_name(robot_name):
-        return robot_name.replace('+', '').replace('=', '').split('-')[0].split('%')[0]
+        return robot_name.replace('+', '').replace('=', '').split('-')[0].split('%')[0].strip()
 
     df['RobotName'] = df['RobotName'].apply(clean_robot_name)
     master_robot = json_data.get("RobotName", "")
