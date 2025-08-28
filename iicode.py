@@ -219,8 +219,8 @@ def ip_json(main_selection, sub_selection, file_path='base/IP.json'):
                 name_part = full_name.split('.')[-1]
                 #name_part = full_name.split(f'.{zone_variable}.')[-1]
                 # Added .strip() to remove potential leading/trailing spaces.
-                #cleaned_name = name_part.replace('+', '').replace('=', '').split('-')[0].split('%')[0].strip()
-                cleaned_name = name_part.replace('=', '').replace('+', '').split('-')[0] 
+                cleaned_name = name_part.replace('+', '').replace('=', '').split('-')[0].split('%')[0].strip()
+                #cleaned_name = name_part.replace('=', '').replace('+', '').split('-')[0] 
                 robot_list.append({"RobotName": cleaned_name, "IP": ip})
                 
     return pd.DataFrame(robot_list, columns=['RobotName', 'IP'])
