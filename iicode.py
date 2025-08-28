@@ -136,8 +136,6 @@ def process_json(project_folder,main_selection, sub_selection):
     """
     Processes the JSON file from the specified project_folder and merges
     it with the filtered IP data based on user selection.
-    
-    NOTE: The function signature has been updated to accept dropdown selections.
     """
     main_value = main_selection.value
     sub_value = sub_selection.value
@@ -154,6 +152,7 @@ def process_json(project_folder,main_selection, sub_selection):
     df = pd.DataFrame(measurements)
 
     def clean_robot_name(robot_name):
+        # This is the standard cleaning logic we defined
         return robot_name.replace('+', '').replace('=', '').split('-')[0].split('%')[0].strip()
 
     df['RobotName'] = df['RobotName'].apply(clean_robot_name)
@@ -170,11 +169,15 @@ def process_json(project_folder,main_selection, sub_selection):
     df_master = pd.DataFrame([master_row])
     df['Role'] = 'Slave'
     combined_df = pd.concat([df_master, df], ignore_index=True)
-    
-    # MODIFICATION: Call ip_json with the user's selections from the dropdowns.
-    # This assumes 'IP.json' is in the same directory.
-    # If it is in a 'base' folder, change the path to 'base/IP.json'.
+
     ip_df = ip_json(main_value, sub_value, file_path='base/IP.json')
+
+    # --- PRUEBA DE IMPRESIÓN ---
+    print("\n--- LISTA 1 (desde IIC Measurements.json) ---")
+    print(sorted(combined_df['RobotName'].tolist()))
+    print("-------------------------------------------\n")
+    # ---------------------------
+
     final_df = pd.merge(combined_df.drop(columns=['IP'], errors='ignore'), ip_df, on='RobotName', how='left')
 
     final_df = final_df.sort_values(by='RobotName', ignore_index=True)
@@ -184,13 +187,8 @@ def process_json(project_folder,main_selection, sub_selection):
 def ip_json(main_selection, sub_selection, file_path='base/IP.json'):
     """
     Reads robot IP data from the provided JSON file, filtering by the selected zone.
-
-    NOTE: The function signature and logic have been updated to filter
-    based on the main and sub category selections.
     """
     robot_list = []
-    # Construct the search key from the dropdown selections.
-    # Example: 'BL03' + ' ' + 'Battery_Tray' -> 'BL03 Battery_Tray'
     search_key = f"{main_selection}_{sub_selection}"
 
     try:
@@ -198,31 +196,28 @@ def ip_json(main_selection, sub_selection, file_path='base/IP.json'):
             data = json.load(f)
     except FileNotFoundError:
         print(f"Error: The IP file was not found at '{file_path}'.")
-        return pd.DataFrame()
+        return pd.DataFrame(columns=['RobotName', 'IP'])
 
     zones = data.get("SHOP_body", {}).get("ZONE", {})
-    
-    # Iterate through all zones in the JSON file.
+
     for zone_key, zone_content in zones.items():
-        # Check if the current zone_key from the file starts with the desired search_key.
-        # This handles cases like 'Bodyside_Outer' matching both
-        # 'BL03 Bodyside_Outer_Left' and 'BL03 Bodyside_Outer_Right'.
         if zone_key.startswith(search_key):
             robot_name_dict = zone_content.get("robot_name", {})
-            if not robot_name_dict: continue
-
-            # The following logic for parsing robot names is kept from your original function.
-            first_full_name = list(robot_name_dict.keys())[0]
-            zone_variable = first_full_name.split('.')[2]
+            if not robot_name_dict:
+                continue
 
             for full_name, ip in robot_name_dict.items():
                 name_part = full_name.split('.')[-1]
-                #name_part = full_name.split(f'.{zone_variable}.')[-1]
-                # Added .strip() to remove potential leading/trailing spaces.
                 cleaned_name = name_part.replace('+', '').replace('=', '').split('-')[0].split('%')[0].strip()
-                #cleaned_name = name_part.replace('=', '').replace('+', '').split('-')[0] 
                 robot_list.append({"RobotName": cleaned_name, "IP": ip})
-                
+
+    # --- PRUEBA DE IMPRESIÓN ---
+    print("\n--- LISTA 2 (desde IP.json) ---")
+    final_names = [robot['RobotName'] for robot in robot_list]
+    print(sorted(final_names))
+    print("---------------------------------\n")
+    # ---------------------------
+
     return pd.DataFrame(robot_list, columns=['RobotName', 'IP'])
 
 
