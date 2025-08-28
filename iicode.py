@@ -189,7 +189,9 @@ def ip_json(main_selection, sub_selection, file_path='base/IP.json'):
     Reads robot IP data from the provided JSON file, filtering by the selected zone.
     """
     robot_list = []
-    search_key = f"{main_selection}{sub_selection}"
+    sub_selection_formatted = sub_selection.replace('_', ' ')
+
+    search_key = f"{main_selection}_{sub_selection_formatted}"
 
     try:
         with open(file_path, 'r') as f:
