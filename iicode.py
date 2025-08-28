@@ -8,7 +8,7 @@ import pandas as pd
 import json
 import datetime
 # --- Global Configuration ---
-VERSION = "V2.0"
+VERSION = "V2.1"
 
 
 
@@ -216,9 +216,11 @@ def ip_json(main_selection, sub_selection, file_path='base/IP.json'):
             zone_variable = first_full_name.split('.')[2]
 
             for full_name, ip in robot_name_dict.items():
-                name_part = full_name.split(f'.{zone_variable}.')[-1]
+                name_part = full_name.split('.')[-1]
+                #name_part = full_name.split(f'.{zone_variable}.')[-1]
                 # Added .strip() to remove potential leading/trailing spaces.
-                cleaned_name = name_part.replace('+', '').replace('=', '').split('-')[0].split('%')[0].strip()
+                #cleaned_name = name_part.replace('+', '').replace('=', '').split('-')[0].split('%')[0].strip()
+                cleaned_name = name_part.replace('=', '').replace('+', '').split('-')[0] 
                 robot_list.append({"RobotName": cleaned_name, "IP": ip})
                 
     return pd.DataFrame(robot_list, columns=['RobotName', 'IP'])
@@ -229,7 +231,7 @@ def generate_rosipcfg_xml(df, project_folder,output_file='ROSIPCFG.xml'):
     """
     Generates ROSIPCFG.xml.
     """
-    VERSION = "V2.0"
+    VERSION = "V2.1"
     current_time = get_timestamp()
     os.makedirs(project_folder, exist_ok=True)
     master_df = df[df['Role'] == 'Master']
@@ -258,7 +260,7 @@ def generate_xvr_files(df, project_folder):
     Generates a single, combined XML file (members.xvr) containing both the
     $IC_AZ_MEMBR and $IC_AZ_CALIB variable configurations.
     """
-    VERSION = "V2.0"
+    VERSION = "V2.1"
     current_time = get_timestamp()
     os.makedirs(project_folder, exist_ok=True)
 
