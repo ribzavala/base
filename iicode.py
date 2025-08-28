@@ -221,7 +221,8 @@ def ip_json(main_selection, sub_selection, file_path='base/IP.json'):
                 cleaned_name = name_part.replace('+', '').replace('=', '').split('-')[0].split('%')[0].strip()
                 robot_list.append({"RobotName": cleaned_name, "IP": ip})
                 
-    return pd.DataFrame(robot_list)
+    return pd.DataFrame(robot_list, columns=['RobotName', 'IP'])
+
 
 
 def generate_rosipcfg_xml(df, project_folder,output_file='ROSIPCFG.xml'):
