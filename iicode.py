@@ -189,9 +189,8 @@ def ip_json(main_selection, sub_selection, file_path='base/IP.json'):
     Reads robot IP data from the provided JSON file, filtering by the selected zone.
     """
     robot_list = []
-    sub_selection_formatted = sub_selection.replace('_', ' ')
 
-    search_key = f"{main_selection}_{sub_selection_formatted}"
+    search_key = f"{main_selection}{sub_selection}"
 
     try:
         with open(file_path, 'r') as f:
@@ -203,23 +202,28 @@ def ip_json(main_selection, sub_selection, file_path='base/IP.json'):
     zones = data.get("SHOP_body", {}).get("ZONE", {})
 
     for zone_key, zone_content in zones.items():
-        if zone_key.startswith(search_key):
+        # --- ESTA ES LA CORRECCIÓN FINAL Y MÁS IMPORTANTE ---
+        # a. Limpiamos la clave del archivo JSON quitando espacios y guiones bajos
+        #    Ej: "BL03_Front Door" -> "BL03FrontDoor"
+        clean_zone_key = zone_key.replace('_', '').replace(' ', '')
+
+        # b. Limpiamos nuestra clave de búsqueda de la misma manera
+        #    Ej: "BL03Front_Door" -> "BL03FrontDoor"
+        clean_search_key = search_key.replace('_', '').replace(' ', '')
+
+        # c. Comparamos las dos versiones limpias. Esto funcionará siempre.
+        if clean_zone_key.startswith(clean_search_key):
+            # --- FIN DE LA CORRECCIÓN ---
+            
             robot_name_dict = zone_content.get("robot_name", {})
-            if not robot_name_dict:
+            if not robot_name_dict: 
                 continue
 
             for full_name, ip in robot_name_dict.items():
                 name_part = full_name.split('.')[-1]
                 cleaned_name = name_part.replace('+', '').replace('=', '').split('-')[0].split('%')[0].strip()
                 robot_list.append({"RobotName": cleaned_name, "IP": ip})
-
-    # --- PRUEBA DE IMPRESIÓN ---
-    print("\n--- LISTA 2 (desde IP.json) ---")
-    final_names = [robot['RobotName'] for robot in robot_list]
-    print(sorted(final_names))
-    print("---------------------------------\n")
-    # ---------------------------
-
+                
     return pd.DataFrame(robot_list, columns=['RobotName', 'IP'])
 
 
