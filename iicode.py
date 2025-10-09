@@ -172,11 +172,6 @@ def process_json(project_folder,main_selection, sub_selection):
 
     ip_df = ip_json(main_value, sub_value, file_path='base/IP.json')
 
-    # --- PRUEBA DE IMPRESIÓN ---
-    print("\n--- LISTA 1 (desde IIC Measurements.json) ---")
-    print(sorted(combined_df['RobotName'].tolist()))
-    print("-------------------------------------------\n")
-    # ---------------------------
 
     final_df = pd.merge(combined_df.drop(columns=['IP'], errors='ignore'), ip_df, on='RobotName', how='left')
 
@@ -202,18 +197,15 @@ def ip_json(main_selection, sub_selection, file_path='base/IP.json'):
     zones = data.get("SHOP_body", {}).get("ZONE", {})
 
     for zone_key, zone_content in zones.items():
-        # --- ESTA ES LA CORRECCIÓN FINAL Y MÁS IMPORTANTE ---
-        # a. Limpiamos la clave del archivo JSON quitando espacios y guiones bajos
-        #    Ej: "BL03_Front Door" -> "BL03FrontDoor"
+
         clean_zone_key = zone_key.replace('_', '').replace(' ', '')
 
-        # b. Limpiamos nuestra clave de búsqueda de la misma manera
-        #    Ej: "BL03Front_Door" -> "BL03FrontDoor"
+
         clean_search_key = search_key.replace('_', '').replace(' ', '')
 
-        # c. Comparamos las dos versiones limpias. Esto funcionará siempre.
+
         if clean_zone_key.startswith(clean_search_key):
-            # --- FIN DE LA CORRECCIÓN ---
+
             
             robot_name_dict = zone_content.get("robot_name", {})
             if not robot_name_dict: 
@@ -254,8 +246,6 @@ def generate_rosipcfg_xml(df, project_folder,output_file='ROSIPCFG.xml'):
     print(xml_content)
 
 
-
-
 def generate_xvr_files(df, project_folder):
     """
     Generates a single, combined XML file (members.xvr) containing both the
@@ -264,8 +254,6 @@ def generate_xvr_files(df, project_folder):
     VERSION = "V2.1"
     current_time = get_timestamp()
     os.makedirs(project_folder, exist_ok=True)
-
-
 
     master_df = df[df['Role'] == 'Master']
     slaves_df = df[df['Role'] == 'Slave']
